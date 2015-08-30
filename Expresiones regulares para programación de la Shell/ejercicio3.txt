@@ -1,0 +1,35 @@
+En el presente ejercicio se pide imprimir en orden varios ping según el tiempo de respuesta.
+- En primer lugar se comprueba que el número de argumentos pasados es uno y que el fichero introducido existe.
+- A continuación, se recorre el fichero pasado y para cada dirección IP se hace ping:
+
+	ping -c 1 $x > /dev/null
+
+Con -c 1 se consigue que sólo mande un ping. Además se guardan los resultados en /dev/null ya que es un archivo especial que descarta toda la información que se escribe o redirecciona en él. A su vez, no proporciona ningún dato a cualquier proceso que se intente leer de él.
+
+- Se comprueba que al ejecutar ping el sistema devuelve 0, en tal caso se guarda la información de la ejecución en el formato que se pide con sed:
+
+	sed -n -e 's/^.*from \(.*\):.*time=\(.*\) ms/La IP \1 respondió en \2/p'
+
+Se buscan dos datos: dirección IP y tiempo de respuesta. La dirección IP se encuentra entre "from" y ":" y el tiempo es localizado entre "time=" y "ms".
+Esta información se guarda en el fichero "responde.txt" para poder ordenar la información posteriormente.
+- Para ordenar la información por tiempo hacemos uso de sort especificándole la columna donde se encuentra el tiempo y el separador:
+	sort -n -k 6 -t ' '
+
+De forma parecida actuamos cuando el sistema da error tras la ejecución de ping, en este caso no es necesario mostrar el tiempo de respuesta, pero dicha información se muestra tras las ejecuciones con respuesta, por ello veo necesario guardar dichas ejecuciones en otro fichero ("noresponde.txt") que se mostrará tras "responde.txt"
+
+
+Ejemplos ejecución:
+i12lopie@NEWTS:~/pas/p2$ ./ejercicio3.sh IPs.txt
+La IP 212.55.8.133 respondió en 21.629
+La IP 212.55.8.132 respondió en 22.873
+La IP 212.145.4.98 respondió en 25.963
+La IP 212.145.4.97 respondió en 32.198
+La IP 8.8.8.8 respondió en 43.426
+La IP 195.5.64.2 respondió en 56.077
+La IP 62.14.63.145 no respondió
+La IP 80.58.32.97 no respondió
+
+
+i12lopie@NEWTS:~/pas/p2$ ./ejercicio3.sh
+Introduce un fichero existente
+

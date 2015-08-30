@@ -1,0 +1,56 @@
+#! /bin/bash
+
+function asignar ()
+{
+	n=$(basename $x)					#Guarda en n el nombre del fichero pasado como parámetro
+	extension=$(echo ${n##*.})				#Guarda la extensión del fichero
+	nombre=$(basename $x .$extension)			#Guarda el nombre sin la extensión
+	directorio=$(dirname $x)				#Guarda el directorio del fichero
+	tamano=$(stat -c%s $x)					#Guarda el tamaño del directorio
+	inodo=$(stat -c%i $x)					#Guarda los enlaces físicos
+	permisos=$(stat -c%A $x)				#Guarda los permisos
+}
+
+if [ $# -ne 2 ];						#Si el número de argumentos pasados como argumentos es distinto de 2
+then
+	if [ $# -eq 1 ];					#Si el número de argumentos es 1
+	then
+		if [ ! -d $1 ];					#Si el primer argumento pasado no es un archivo se sale del programa
+		then
+			echo "Introduce un directorio existente "
+		else			
+	
+			echo "Nombre;Extensión;Directorio;Tamaño;ReferenciasInodo;Permisos"
+	
+			for x in $( find $1)			#Recorre el directorio pasado
+			do
+				asignar $x			#Llama a la función asingnar() pasándole el nombre de archivo
+	
+				echo "$nombre;$extension;$directorio;$tamano;$inodo;$permisos"
+			done | sort -nr -k 4 -t ';'		#Ordena la salida según la cuarta columna (tamano)
+		fi
+	else							#Si el número de argumentos es 0 o superior a 2
+		echo "Debe introducir directorio y tamaño"
+	fi
+
+else								
+	if [ ! -d $1 ];				
+	then
+		echo "Introduce un directorio existente "
+	else
+		if [ $2 -ge 0 ];				#Comprueba si el segundo argumento es igual o superior a 0
+		then	
+			echo "Nombre;Extensión;Directorio;Tamaño;ReferenciasInodo;Permisos"
+
+			for x in $( find $1 -size "+$2c")	#+ representa valor superior, c representa bytes
+			do
+				asignar $x
+
+				echo "$nombre;$extension;$directorio;$tamano;$inodo;$permisos"
+
+			done | sort -nr -k 4 -t ';'		#Declara como separador de columnas ;
+		else
+			echo "Debe introducir un número entero igual o superior a 0"
+		fi
+	fi
+fi

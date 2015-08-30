@@ -1,0 +1,42 @@
+En el ejercicio4 se pide realizar un script para realizar copias de seguridad a ficheros pasados como argumentos.
+
+En primer lugar, se comprueba que al menos uno de los ficheros pasados exista, en caso contrario se sale del programa.
+A continuación se crea el directorio Copia si no se había creado con anterioridad. Seguidamente con un bucle for que recorra la carpeta Copia se calcula el tiempo de creación de las copias realizadas anteriormente:
+
+for x in $(find \Copia -name "*.tar")
+	do 
+		hora=$(( $(date +"%s") - $(stat -c "%Y" $x) )) 		
+		if [ $hora -gt "200" ] 
+		then
+		
+			echo "Borrando $x con un tiempo de [$hora] segundos..."
+			rm $x #Elimina el fichero
+		fi
+	done 
+
+Si el tiempo es superior a 200 segundos se borra el fichero. A lo hora de buscar ficheros en Copia he especificado que tengan extensión .tar, ya que intentaría borrar el propio directorio Copia.
+
+Por último se crea la copia de seguridad de los archivos o directorios pasados:
+
+	file=copia-$USER-$(date +"%s").tar			
+	tar zcvf $file $*						
+	mv $file \Copia	
+
+Para crear el archivo comprimido pasamos como tercer argumento $*, ya que debemos especificar los archivos a incluir en el comprimido, y esto devuelve todo lo que hallamos pasado como argumento como una cadena de texto. En la última línea movemos el archivo comprimido a la carpeta Copia.
+
+Ejemplos de ejecución:
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas$ ./ejercicio4.sh lib include
+lib/
+lib/libsysfs.so.2
+lib/libtic.so.5
+lib/libglib-2.0.so.0
+include/
+include/HMath.h
+include/compat_strlcpy.h
+include/adaboost_ecoc.h
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas$ ./ejercicio4.sh TEMA2
+Borrando Copia/copia-emilio-1394922441.tar con un tiempo de [349] segundos...
+TEMA2/
+
+

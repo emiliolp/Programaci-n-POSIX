@@ -1,0 +1,60 @@
+El ejercicio 3 copia el contenido de la carpeta pasada como primer argumento a la pasada como segundo argumento, en el caso de que no exista la segunda carpeta, la crea.
+
+La estructura del ejercicio es la siguiente:
+- En primer lugar compruebo que el usuario introduce dos parámetros, en caso contrario, se sale del programa.
+- En segundo lugar comprueba que el primer argumento es un fichero.
+- Si todo lo anterior se cumple:
+	- Copia recursivamente el contenido de la primera carpeta en la segunda:
+		cp -R $1 $2
+	- A continuación se renombran cada uno de los ficheros y carpetas contenidos en la carpeta pasada como primer argumento en el bucle 		for que recorre la carpeta ya copiada, recorriendo el directorio de forma inversa, ya que si se cambia el nombre de las carpetas 		que se encuentran en niveles superiores no se encuentran los ficheros encontrados en dichas carpetas.
+
+Ejemplos ejecuciones:
+emilio@emilio-Satellite-C660:~/informatica/segundo$ ./ejercicio3.sh carpetaPrueba carpetaMayusculas
+emilio@emilio-Satellite-C660:~/informatica/segundo$ find carpetaMayusculas
+carpetaMayusculas
+carpetaMayusculas/C1
+carpetaMayusculas/C1/SVM_MODEL_MATLAB.C
+carpetaMayusculas/C1/SMO_ROUTINE.C
+carpetaMayusculas/C1/ADABOOST_ECOC.H
+carpetaMayusculas/C1/LIBTIC.SO.5
+carpetaMayusculas/C1/HMATH.H
+carpetaMayusculas/C1/CARPETATERCERA
+carpetaMayusculas/C1/CARPETATERCERA/BCACHE.CPP
+carpetaMayusculas/C1/CARPETATERCERA/ACT_FUNC.C
+carpetaMayusculas/C1/CARPETATERCERA/LIBSYSFS.SO.2
+carpetaMayusculas/C1/COMPAT_STRLCPY.H
+carpetaMayusculas/C2
+carpetaMayusculas/C2/A.OUT
+carpetaMayusculas/C2/PRUEBA.C
+carpetaMayusculas/C2/EJEMPLOSUID.SH
+carpetaMayusculas/C2/LIBGLIB-2.0.SO.0
+carpetaMayusculas/IMG
+carpetaMayusculas/IMG/FOTOSORIGINALES
+carpetaMayusculas/IMG/FOTOSORIGINALES/THUMB_LOGO_EPS_GRANDE.JPG
+carpetaMayusculas/IMG/FOTOSORIGINALES/LOGO_UCO.GIF
+carpetaMayusculas/IMG/CARPETA1
+carpetaMayusculas/IMG/CARPETA1/THUMB_RICHARD-STALLMAN.JPG
+carpetaMayusculas/IMG/CARPETA1/THUMB_LINUS_TORVALDS.JPG
+carpetaMayusculas/IMG/CARPETA1/THUMB_PIRATES.JPG
+carpetaMayusculas/IMG/CARPETA1/THUMB_ELINFIERNOEXISTE.JPG
+carpetaMayusculas/IMG/CARPETA1/DEVOCION-ADMINISTRADOR-DE-SISTEMAS.PNG
+carpetaMayusculas/IMG/TEMA2
+carpetaMayusculas/IMG/TEMA2/A2.OUT
+carpetaMayusculas/IMG/TEMA2/HD.PNG
+carpetaMayusculas/IMG/TEMA2/RAID0.PNG
+carpetaMayusculas/IMG/TEMA2/THUMB_HDORG.JPG
+carpetaMayusculas/C3
+carpetaMayusculas/C3/LOGO
+carpetaMayusculas/C3/EJE2
+carpetaMayusculas/C3/DISCO
+carpetaMayusculas/C3/DISCO2
+
+- Si no se pasa un directorio como primer argumento:
+emilio@emilio-Satellite-C660:~/informatica/segundo$ ./ejercicio3.sh dd directorio
+Introduce un directorio y/o cadena existente
+
+- Si no se pasan dos argumentos:
+emilio@emilio-Satellite-C660:~/informatica/segundo$ ./ejercicio3.sh carpetaPrueba
+Tienes que introducir 2 parámetros
+
+

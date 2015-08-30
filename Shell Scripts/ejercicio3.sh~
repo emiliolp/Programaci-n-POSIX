@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]								#Si el número de argumentos pasados como argumento distinto de 2
+then
+	echo "Tienes que introducir 2 parámetros"
+else
+	if [ ! -d $1 ]							#Si el primer argumento no es un fichero
+	then
+		echo "Introduce un directorio y/o cadena existente "
+	else								#Si no es un fichero
+		cp -R $1 $2						#Copia recursivamente con la misma estructura el contenido del primer directorio en el segundo, si no lo crea
+		for file in $(find $2 | sort -nr)			#Recorre la carpeta copiada y lo recorre inversamente
+		do 
+			archivo=$(basename $file | tr [:lower:] [:upper:])
+			mv $file $(dirname $file)/$(echo $archivo)	#Renombra el fichero
+		done
+		mv $archivo $file					#Vuelve a renombrar el directorio pasado, ya que al hacer lo anterior cambia su nombre
+		
+	fi
+fi

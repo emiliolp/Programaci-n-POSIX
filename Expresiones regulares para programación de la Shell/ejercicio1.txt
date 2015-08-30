@@ -1,0 +1,243 @@
+En el presente ejercicio se deben mostrar las líneas que satisfacen los emparejamientos requeridos.
+
+En los nueve primeros casos he usado grep y en el último sed, ya que hay que modificar la salida.
+
+Ejemplo ejecución:
+
+i12lopie@NEWTS:~/pas/p2$ ./ejercicio1.sh
+======
+1) Líneas que contienen un número de teléfono:
+    Tel.: 956 582 800.  Fax: 956 665 888. 
+    Tel.: 950 542 000.  Fax: 950 542 001. 
+    Tel.: 956 297 100.  Fax: 956 266 303. 
+    Tel.: 957 222 881.  Fax: 957 472 498.  Tel. Restaurante: 957 222 881
+    Tel.: 957 224 949. 
+    Tel.: 952 198 680.  Fax: 952 473 898. 
+======
+2) Líneas que empiezan por 4 espacios:
+    Centro Comercial Bahía de Algeciras
+    Paseo Juan Pérez Arriete s/n
+    Tel.: 956 582 800.  Fax: 956 665 888. 
+    Centro Comercial El Ejido 010
+    Paseo de Pedro Ponce, s/n
+    Tel.: 950 542 000.  Fax: 950 542 001. 
+    Centro de Oportunidades
+    C/ Altosótano Bernardino Martínez, 2 (esqu. C/ Hornos)
+    Centro de Oportunidades
+    Plaza Solymar, 1 - CC. Benalmar
+    Centro Comercial Bahía de Cádiz
+    Avda. de las Cortes de Cádiz,1
+    Tel.: 956 297 100.  Fax: 956 266 303. 
+    Centro de Oportunidades
+    Explanada Muelle Cañonero Dato, s/n
+    Centro de Oportunidades
+    Ctra. de Cártama a Coín - CC. La Trocha
+    Ronda de los Tejares
+    Ronda de los Tejares, 30
+    Tel.: 957 222 881.  Fax: 957 472 498.  Tel. Restaurante: 957 222 881
+    Centro Comercial Ciudad de Córdoba
+    Ronda de Poniente-Ctra. Sta. María de Trassierra, s/n
+    Tel.: 957 224 949. 
+    Centro Comercial Los Bolilches
+    Avda. Nuestro Padre Jesús Cautivo, 3 / Los Boliches. Fuengirola
+    Tel.: 952 198 680.  Fax: 952 473 898. 
+======
+3) Líneas que empiezan la letra C (con o sin espacios antes):
+    Centro Comercial Bahía de Algeciras
+    Centro Comercial El Ejido 010
+    Centro de Oportunidades
+    C/ Altosótano Bernardino Martínez, 2 (esqu. C/ Hornos)
+    Centro de Oportunidades
+Cádiz
+    Centro Comercial Bahía de Cádiz
+Ceuta
+    Centro de Oportunidades
+Coín
+    Centro de Oportunidades
+    Ctra. de Cártama a Coín - CC. La Trocha
+Córdoba
+    Centro Comercial Ciudad de Córdoba
+    Centro Comercial Los Bolilches
+======
+4) Líneas que contienen una vocal, un caracter y la misma vocal:
+    Paseo Juan Pérez Arriete s/n
+    Plaza Solymar, 1 - CC. Benalmar
+    Explanada Muelle Cañonero Dato, s/n
+    Ctra. de Cártama a Coín - CC. La Trocha
+======
+5) Eliminar líneas vacías:
+Algeciras
+    Centro Comercial Bahía de Algeciras
+    Paseo Juan Pérez Arriete s/n
+    Tel.: 956 582 800.  Fax: 956 665 888. 
+Almería
+    Centro Comercial El Ejido 010
+    Paseo de Pedro Ponce, s/n
+    Tel.: 950 542 000.  Fax: 950 542 001. 
+Andújar
+    Centro de Oportunidades
+    C/ Altosótano Bernardino Martínez, 2 (esqu. C/ Hornos)
+Benalmádena Costa
+    Centro de Oportunidades
+    Plaza Solymar, 1 - CC. Benalmar
+Cádiz
+    Centro Comercial Bahía de Cádiz
+    Avda. de las Cortes de Cádiz,1
+    Tel.: 956 297 100.  Fax: 956 266 303. 
+Ceuta
+    Centro de Oportunidades
+    Explanada Muelle Cañonero Dato, s/n
+Coín
+    Centro de Oportunidades
+    Ctra. de Cártama a Coín - CC. La Trocha
+Córdoba
+    Ronda de los Tejares
+    Ronda de los Tejares, 30
+    Tel.: 957 222 881.  Fax: 957 472 498.  Tel. Restaurante: 957 222 881
+    Centro Comercial Ciudad de Córdoba
+    Ronda de Poniente-Ctra. Sta. María de Trassierra, s/n
+    Tel.: 957 224 949. 
+Fuengirola (Los Boliches)
+    Centro Comercial Los Bolilches
+    Avda. Nuestro Padre Jesús Cautivo, 3 / Los Boliches. Fuengirola
+    Tel.: 952 198 680.  Fax: 952 473 898. 
+======
+6) Líneas que contienen a y u (en mayúscula o minúscula):
+    Paseo Juan Pérez Arriete s/n
+    Centro de Oportunidades
+    C/ Altosótano Bernardino Martínez, 2 (esqu. C/ Hornos)
+    Centro de Oportunidades
+Ceuta
+    Centro de Oportunidades
+    Explanada Muelle Cañonero Dato, s/n
+    Centro de Oportunidades
+    Tel.: 957 222 881.  Fax: 957 472 498.  Tel. Restaurante: 957 222 881
+    Centro Comercial Ciudad de Córdoba
+Fuengirola (Los Boliches)
+    Avda. Nuestro Padre Jesús Cautivo, 3 / Los Boliches. Fuengirola
+======
+7) Líneas que NO contienen la secuencia de caracteres des:
+Algeciras
+
+    Centro Comercial Bahía de Algeciras
+    Paseo Juan Pérez Arriete s/n
+    Tel.: 956 582 800.  Fax: 956 665 888. 
+
+Almería
+
+    Centro Comercial El Ejido 010
+    Paseo de Pedro Ponce, s/n
+    Tel.: 950 542 000.  Fax: 950 542 001. 
+
+Andújar
+
+    C/ Altosótano Bernardino Martínez, 2 (esqu. C/ Hornos)
+
+Benalmádena Costa
+
+    Plaza Solymar, 1 - CC. Benalmar
+
+Cádiz
+
+    Centro Comercial Bahía de Cádiz
+    Avda. de las Cortes de Cádiz,1
+    Tel.: 956 297 100.  Fax: 956 266 303. 
+
+Ceuta
+
+    Explanada Muelle Cañonero Dato, s/n
+
+Coín
+
+    Ctra. de Cártama a Coín - CC. La Trocha
+
+Córdoba
+
+    Ronda de los Tejares
+    Ronda de los Tejares, 30
+    Tel.: 957 222 881.  Fax: 957 472 498.  Tel. Restaurante: 957 222 881
+    Centro Comercial Ciudad de Córdoba
+    Ronda de Poniente-Ctra. Sta. María de Trassierra, s/n
+    Tel.: 957 224 949. 
+
+Fuengirola (Los Boliches)
+
+    Centro Comercial Los Bolilches
+    Avda. Nuestro Padre Jesús Cautivo, 3 / Los Boliches. Fuengirola
+    Tel.: 952 198 680.  Fax: 952 473 898. 
+======
+8) Líneas que contienen cuatro vocales e o más:
+    Centro Comercial Bahía de Algeciras
+    Paseo Juan Pérez Arriete s/n
+    Centro Comercial El Ejido 010
+    Paseo de Pedro Ponce, s/n
+    Explanada Muelle Cañonero Dato, s/n
+    Tel.: 957 222 881.  Fax: 957 472 498.  Tel. Restaurante: 957 222 881
+    Ronda de Poniente-Ctra. Sta. María de Trassierra, s/n
+    Avda. Nuestro Padre Jesús Cautivo, 3 / Los Boliches. Fuengirola
+======
+9) Líneas que contienen una letra mayúscula seguida de una vocal sin tilde:
+    Centro Comercial Bahía de Algeciras
+    Paseo Juan Pérez Arriete s/n
+    Tel.: 956 582 800.  Fax: 956 665 888. 
+    Centro Comercial El Ejido 010
+    Paseo de Pedro Ponce, s/n
+    Tel.: 950 542 000.  Fax: 950 542 001. 
+    Centro de Oportunidades
+    C/ Altosótano Bernardino Martínez, 2 (esqu. C/ Hornos)
+Benalmádena Costa
+    Centro de Oportunidades
+    Plaza Solymar, 1 - CC. Benalmar
+    Centro Comercial Bahía de Cádiz
+    Avda. de las Cortes de Cádiz,1
+    Tel.: 956 297 100.  Fax: 956 266 303. 
+Ceuta
+    Centro de Oportunidades
+    Explanada Muelle Cañonero Dato, s/n
+Coín
+    Centro de Oportunidades
+    Ctra. de Cártama a Coín - CC. La Trocha
+    Ronda de los Tejares
+    Ronda de los Tejares, 30
+    Tel.: 957 222 881.  Fax: 957 472 498.  Tel. Restaurante: 957 222 881
+    Centro Comercial Ciudad de Córdoba
+    Ronda de Poniente-Ctra. Sta. María de Trassierra, s/n
+    Tel.: 957 224 949. 
+Fuengirola (Los Boliches)
+    Centro Comercial Los Bolilches
+    Avda. Nuestro Padre Jesús Cautivo, 3 / Los Boliches. Fuengirola
+    Tel.: 952 198 680.  Fax: 952 473 898. 
+======
+10) Emparejamientos del patrón anterior:
+    "Ce"ntro "Co"mercial "Ba"hía de Algeciras
+    "Pa"seo "Ju"an Pérez Arriete s/n
+    "Te"l.: 956 582 800.  "Fa"x: 956 665 888. 
+    "Ce"ntro "Co"mercial El Ejido 010
+    "Pa"seo de "Pe"dro "Po"nce, s/n
+    "Te"l.: 950 542 000.  "Fa"x: 950 542 001. 
+    "Ce"ntro de Oportunidades
+    C/ Altosótano "Be"rnardino "Ma"rtínez, 2 (esqu. C/ "Ho"rnos)
+"Be"nalmádena "Co"sta
+    "Ce"ntro de Oportunidades
+    Plaza "So"lymar, 1 - CC. "Be"nalmar
+    "Ce"ntro "Co"mercial "Ba"hía de Cádiz
+    Avda. de las "Co"rtes de Cádiz,1
+    "Te"l.: 956 297 100.  "Fa"x: 956 266 303. 
+"Ce"uta
+    "Ce"ntro de Oportunidades
+    Explanada "Mu"elle "Ca"ñonero "Da"to, s/n
+"Co"ín
+    "Ce"ntro de Oportunidades
+    Ctra. de Cártama a "Co"ín - CC. "La" Trocha
+    "Ro"nda de los "Te"jares
+    "Ro"nda de los "Te"jares, 30
+    "Te"l.: 957 222 881.  "Fa"x: 957 472 498.  "Te"l. "Re"staurante: 957 222 881
+    "Ce"ntro "Co"mercial "Ci"udad de Córdoba
+    "Ro"nda de "Po"niente-Ctra. Sta. "Ma"ría de Trassierra, s/n
+    "Te"l.: 957 224 949. 
+"Fu"engirola ("Lo"s "Bo"liches)
+    "Ce"ntro "Co"mercial "Lo"s "Bo"lilches
+    Avda. "Nu"estro "Pa"dre "Je"sús "Ca"utivo, 3 / "Lo"s "Bo"liches. "Fu"engirola
+    "Te"l.: 952 198 680.  "Fa"x: 952 473 898. 
+======
+

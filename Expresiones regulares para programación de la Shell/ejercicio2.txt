@@ -1,0 +1,92 @@
+En el ejercicio2 se deben mostrar por una parte los ficheros ocultos de la carpeta del usuario ordenados por número de caracteres y por otra parte los procesos que el usuario actual esté ejecutando.
+
+En primer lugar se buscan los ficheros cuyo nombre empiecen por \. en la carpeta del usuario:
+
+	for archivo in $(ls -a /home/$USER | grep '^\.')
+
+Donde -a hace que se muestren también los ficheros ocultos.
+Los nombres de esos ficheros junto con el número de caracteres se guardarán en un fichero auxiliar para acceder al resultado final más facilmente.
+Para mostrar la lista ordenada se hace uso de sort:
+
+	sort -k1n ocultos | cut -d "," -f 2
+
+Para la segunda parte hacemos uso del comando ps aux y guardamos los campos 1, 2, 9 y 11, ya que son los únicos útiles.
+
+Para finalizar, hacemos uso de sed para mostrar únicamente las líneas con el usuario actual y nos valemos de las comas introducidas al guardar la información para mostrar la ejecución en el formato correcto.
+
+Ejemplo ejecución:
+
+i12lopie@NEWTS:~/pas/p2$ ./ejercicio2.sh
+.
+..
+.qt
+.dia
+.kde
+.ssh
+.dbus
+.dmrc
+.gvfs
+.java
+.mcop
+.adobe
+.cache
+.cshrc
+.gconf
+.icons
+.local
+.login
+.nedit
+.pulse
+.config
+.gconfd
+.gnome2
+.mcoprc
+.pencil
+.themes
+.emacs.d
+.mozilla
+.spyder2
+.esd_auth
+.gimp-2.7
+.nautilus
+.pylint.d
+.evolution
+.fr-VmTldi
+.install4j
+.wireshark
+.fontconfig
+.macromedia
+.matplotlib
+.thumbnails
+.libreoffice
+.python-eggs
+.thunderbird
+.bash_history
+.ICEauthority
+.packettracer
+.pulse-cookie
+.xmlcopyeditor
+.gnome2_private
+.gstreamer-0.10
+.python27_compiled
+.kdbgrc.ejercicio11
+.recently-used.xbel
+.nfs0000000000f2b84200000041
+.nfs0000000000f2baf200000040
+.nfs000000000113c5a90000001a
+.nfs000000000113e35d00000019
+.nfs000000000114200b00000013
+.nfs000000000114275c00000015
+.nfs0000000001143f9d00000014
+.nfs0000000001143fbe00000016
+.nfs00000000011441a500000017
+.nfs000000000114423600000018
+.nfs000000000197796a0000003f
+PID: "28360" Ejecutable: "sshd:" Hora Inicio: "13:46"
+PID: "28363" Ejecutable: "-bash" Hora Inicio: "13:46"
+PID: "28655" Ejecutable: "/bin/bash" Hora Inicio: "13:47"
+PID: "28860" Ejecutable: "ps" Hora Inicio: "13:47"
+PID: "28861" Ejecutable: "tr" Hora Inicio: "13:47"
+PID: "28862" Ejecutable: "tr" Hora Inicio: "13:47"
+PID: "28863" Ejecutable: "cut" Hora Inicio: "13:47"
+

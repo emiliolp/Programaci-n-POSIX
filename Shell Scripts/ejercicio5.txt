@@ -1,0 +1,28 @@
+El ejercicio 5 pide crear un script para calcular las veces que ha conducido una persona mayor de edad, y los años que le hacen falta para conducir, en el caso de que el usuario sea menor.
+
+En primer lugar, comprueba si el numero introducido es superior a 0, en caso contrario el programa finaliza su ejecución. Seguidamente se evalúa el valor introducido por teclado: 
+- Si edad es menor que 18 se resta a 18 la edad del usuario:
+	let falta=18-$edad
+
+- Si edad es igual a 18 o superior, se genera un número aleatorio (menor que 99), dicho valor se multiplica por el número de años que el usuario lleva conduciendo:
+
+	r=$RANDOM%99					
+	let veces_conducido=($edad-18+1)*$r
+
+Ejemplos de ejecuciones:
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas$ ./ejercicio5.sh
+¿Cuál es su edad? 13
+No tienes permitido conducir. Te faltan 5 años.
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas$ ./ejercicio5.sh
+¿Cuál es su edad? 34
+Tienes permitido conducir un coche y has conducido 27 veces hasta la fecha.
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas$ ./ejercicio5.sh
+¿Cuál es su edad? 18
+Tienes permitido conducir un coche y has conducido 20 veces hasta la fecha.
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas$ ./ejercicio5.sh
+¿Cuál es su edad? -3
+Debe introducir un número igual o superior a 0
+

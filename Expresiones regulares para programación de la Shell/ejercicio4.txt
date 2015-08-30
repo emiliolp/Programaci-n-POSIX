@@ -1,0 +1,49 @@
+En el ejercicio4 se muestra el contenido de una determinada página web.
+
+- En primer lugar hacemos uso del comando wget con el que guardamos el contenido de la página en un archivo html, utilizo la opción -q para que no muestre la información y progreso de la descarga.
+
+- A continuación mostramos el contenido del archivo html de la forma requerida:
+
+	cat GeoPortalMityc | sed -n -e 's/^.*EcoPrecio \(.\{7,8\}\) \(.\{1,2\}\) \(.*\) es \(.*\)€.*$/Precio: "\4"€ Combustible: "\1 \2" Ciudad: "\3"/p' | sort -n -k 2 -t '"'	
+
+La información que necesitamos es el precio, combustible y ciudad de la oferta. Para ello buscamos las líneas que empiecen de cualquier forma pero que contengan la palabra "EcoPrecio" los siguientes siete u ocho caracteres corresponden a "Gasóleo" o "Gasolina", tras un espacio, los uno o dos siguientes son el tipo de combustible. La ciudad y el precio se encuentran entre espacios y la palabra "es".
+
+El comando sed se utiliza de igual forma en ambas formas de ordenar el contenido, lo que cambia al listar es el orden. En el primer caso, ordenamos la salida por la segunda columna (sort -n -k 2 -t), en el segundo caso ordenamos la salida por la sexta (sort -k 6 -t).
+
+Para evitar redundancia de ficheros con el mismo contenido tras varias ejecuciones borramos el archivo con rm tras la misma.
+
+Ejemplo de ejecuciones:
+
+i12lopie@NEWTS:~/pas/p2$ ./ejercicio4.sh
+Descargando la web https://twitter.com/GeoPortalMityc...
+Listado de precios de GeoPortalMityc ordenados por precio del Combustible:
+Precio: "1.215"€ Combustible: "Gasóleo A" Ciudad: "ZARAGOZA"
+Precio: "1.249"€ Combustible: "Gasóleo A" Ciudad: "MADRID"
+Precio: "1.284"€ Combustible: "Gasóleo A" Ciudad: "BARCELONA"
+Precio: "1.286"€ Combustible: "Gasóleo A" Ciudad: "SEVILLA"
+Precio: "1.299"€ Combustible: "Gasóleo A" Ciudad: "VALENCIA / VALÈNCIA"
+Precio: "1.319"€ Combustible: "Gasolina 95" Ciudad: "MADRID"
+Precio: "1.324"€ Combustible: "Gasolina 95" Ciudad: "ZARAGOZA"
+Precio: "1.330"€ Combustible: "Gasolina 95" Ciudad: "SEVILLA"
+Precio: "1.339"€ Combustible: "Gasóleo A" Ciudad: "MÁLAGA"
+Precio: "1.342"€ Combustible: "Gasóleo A" Ciudad: "MÁLAGA"
+Precio: "1.357"€ Combustible: "Gasolina 95" Ciudad: "BARCELONA"
+Precio: "1.369"€ Combustible: "Gasolina 95" Ciudad: "VALENCIA / VALÈNCIA"
+Precio: "1.374"€ Combustible: "Gasolina 95" Ciudad: "BARCELONA"
+Precio: "1.394"€ Combustible: "Gasolina 95" Ciudad: "MÁLAGA"
+Listado de precios de GeoPortalMityc ordenados por localidad:
+Precio: "1.284"€ Combustible: "Gasóleo A" Ciudad: "BARCELONA"
+Precio: "1.357"€ Combustible: "Gasolina 95" Ciudad: "BARCELONA"
+Precio: "1.374"€ Combustible: "Gasolina 95" Ciudad: "BARCELONA"
+Precio: "1.249"€ Combustible: "Gasóleo A" Ciudad: "MADRID"
+Precio: "1.319"€ Combustible: "Gasolina 95" Ciudad: "MADRID"
+Precio: "1.339"€ Combustible: "Gasóleo A" Ciudad: "MÁLAGA"
+Precio: "1.342"€ Combustible: "Gasóleo A" Ciudad: "MÁLAGA"
+Precio: "1.394"€ Combustible: "Gasolina 95" Ciudad: "MÁLAGA"
+Precio: "1.286"€ Combustible: "Gasóleo A" Ciudad: "SEVILLA"
+Precio: "1.330"€ Combustible: "Gasolina 95" Ciudad: "SEVILLA"
+Precio: "1.299"€ Combustible: "Gasóleo A" Ciudad: "VALENCIA / VALÈNCIA"
+Precio: "1.369"€ Combustible: "Gasolina 95" Ciudad: "VALENCIA / VALÈNCIA"
+Precio: "1.215"€ Combustible: "Gasóleo A" Ciudad: "ZARAGOZA"
+Precio: "1.324"€ Combustible: "Gasolina 95" Ciudad: "ZARAGOZA"
+

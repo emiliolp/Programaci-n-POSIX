@@ -1,0 +1,19 @@
+En el presente ejercicio se pide un script que agrupe los ficheros encontrados en directorio pasado como argumento en distintos directorios con el nombre que el usuario eliga.
+- En la primera parte del script compruebo el nombre del directorio introducido por el usuario, en caso de que no introduzca ninguna se la asignara uno por defecto.
+
+- En la segunda parte compruebo la extensión de cada fichero para agruparlo en su carpeta correspondiente.
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas$ ./ejercicio2b.sh carpetaPrueba
+Introduzca el directorio donde copiar los ejecutables: 
+Se ha pasado el tiempo el directorio por defecto es /bin
+Introduzca el directorio donde copiar las librerias: 
+Se ha pasado el tiempo el directorio por defecto es /lib
+Introduzca el directorio donde copiar las imagenes: 
+Se ha pasado el tiempo el directorio por defecto es /img
+Introduzca el directorio donde copiar las cabeceras: 
+Se ha pasado el tiempo la cabecera por defecto es /include
+Utilizando los ficheros:
+bin para almacenar los ficheros ejecutables
+lib para almacenar las librerías
+img para almacenar los ficheros de imagen
+include para almacenar los ficheros de cabeceras

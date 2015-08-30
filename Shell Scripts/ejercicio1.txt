@@ -1,0 +1,32 @@
+En el presente ejercicio se deben pasar dos parámetros como argumentos (carpeta y entero).
+En primer lugar compruebo el número de argumentos que se pasan:
+- Si se pasa un argumento se comprueba que se trata de un directorio existente (if [ ! -d $1 ];), se buscan en dicho directorio todos los archivos (for x in $( find $1)) y se muestra la información de dichos archivos de manera ordenada por su tamaño (sort -nr -k 4 -t ';'). A la hora de llamar a los comandos que devuelven la información requerida utilizo la función asignar(), ya que dicha acción se repetirá posteriormente.
+
+- Si se pasan dos argumentos se opera de igual forma que antes, aunque cambiando la sentencia utilizada para filtrar los archivos del directorio por el tamaño incluído como segundo argumento (for x in $( find $1 -size "+$2c")).
+
+Ejemplos de ejecución:
+Si solo se pasa un argumento (directorio) se mostrará la información de todos los archivos ordenados por tamaño
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas$ ./ejercicio1.sh carpetaPrueba
+Nombre;Extensión;Directorio;Tamaño;ReferenciasInodo;Permisos
+libglib-2.0.so;0;carpetaPrueba/c2;822344;1578640;-rw-r--r--
+hd;png;carpetaPrueba/img/Tema2;367419;1578628;-rw-r--r--
+disco2;disco2;carpetaPrueba/c3;367419;1578645;-rw-r--r--
+thumb_hdOrg;jpg;carpetaPrueba/img/Tema2;142700;1578629;-rw-r--r--
+thumb_elinfiernoexiste;jpg;carpetaPrueba/img/Carpeta1;119847;1578621;-rw-r--r--
+raid0;png;carpetaPrueba/img/Tema2;50683;1578631;-rw-r--r--
+libtic.so;5;carpetaPrueba/c1;48572;1578635;-rw-r--r--
+
+Si el primer argumento no es un directorio:
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas$ ./ejercicio1.sh 44
+Introduce un directorio y/o cadena existente
+
+Si no se introducen argumentos:
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas$ ./ejercicio1.sh
+Debe introducir directorio y tamaño
+
+Si el segundo argumento no es un número igual o superior a 0:
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas$ ./ejercicio1.sh carpetaPrueba -44
+Debe introducir un número entero igual o superior a 0
+ 
+

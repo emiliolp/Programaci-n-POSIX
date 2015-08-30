@@ -1,0 +1,55 @@
+En el ejercicio 5 se pide realizar un script que muestre la información existente en el fichero /etc/passwd de forma amigable.
+
+	En primer lugar comprobamos que se pase un único argumento y que se trata de 0 ó 1. Si se trata de un 0 mostramos la información del fichero con cat y con el formato pedido con ayuda de sed. Con ello buscamos los campos incluídos entre ":". Para mostrar sólo los usuarios con un UID mayor que 1000 actuamos de igual forma, con la excepción de que en el campo que utilizamos para especificar dicho identificador especificamos que se trate de cuatro o más caracteres entre ":" (número con cuatro o más cifras):
+
+	\(.\{4,\}\)
+
+Ejemplos ejecución:
+
+i12lopie@NEWTS:~/pas/p2$ ./ejercicio5.sh 1
+Logname: nobody
+->UID: 65534
+->GID: 65534
+->gecos: nobody
+->Home: /nonexistent
+->Shell por defecto: /bin/sh
+Logname: nx
+->UID: 9545
+->GID: 9545
+->gecos: 
+->Home: /var/lib/neatx/home
+->Shell por defecto: /usr/local/lib/neatx/nxserver-login-wrapper
+
+i12lopie@NEWTS:~/pas/p2$ ./ejercicio5.sh 0
+Logname: root
+->UID: 0
+->GID: 0
+->gecos: root
+->Home: /root
+->Shell por defecto: /bin/bash
+Logname: daemon
+->UID: 1
+->GID: 1
+->gecos: daemon
+->Home: /usr/sbin
+->Shell por defecto: /bin/sh
+Logname: bin
+->UID: 2
+->GID: 2
+->gecos: bin
+->Home: /bin
+->Shell por defecto: /bin/sh
+Logname: sys
+->UID: 3
+->GID: 3
+->gecos: sys
+->Home: /dev
+->Shell por defecto: /bin/sh
+Logname: sync
+->UID: 4
+->GID: 65534
+->gecos: sync
+->Home: /bin
+->Shell por defecto: /bin/sync
+
+

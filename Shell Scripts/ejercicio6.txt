@@ -1,0 +1,28 @@
+En el ejercicio 6 se pide crear un script para que dado un resumen hash se genere su clave:
+- En primer lugar debemos examinar el segundo argumento que introduce el usuario y operamos según el mismo:
+- Si el argumento es 2 buscamos las posibles combinaciones de letras con 2 caracteres:
+
+	for x in $(echo {a..z}{a..z})
+	do
+		res=$(echo $x | sha1sum | cut -d " " -f1)
+	done
+
+Ademas ejecutamos el comando para que nos devuelva el resumen, a partir de la posible clave.
+- Comparamos el resumen obtenido con el introducido por el usuario, si coinciden, se imprime la clave.
+
+Para 1 y 3 caracteres opero de la misma forma, aunque cambiando el bucle for:
+for x in $(echo {a..z})
+for x in $(echo {a..z}{a..z}{a..z}{a..z})
+
+Ejemplos de ejecuciones:
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas$ ./ejercicio6.sh ee9e51458f4642f48efe956962058245ee7127b1 3
+Buscando contraseñas de 3 caracteres...
+Encontrada la clave: bye
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas$ ./ejercicio6.sh 344b7d23c300e18d73da6f827977b7900470d7ed  2
+Buscando contraseñas de 2 caracteres...
+Encontrada la clave: el
+
+
+ 
+	

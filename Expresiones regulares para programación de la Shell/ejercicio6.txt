@@ -1,0 +1,13 @@
+En el ejercicio 6 se pide realizar un script para analizar los ficheros de arranque de directorio dado como argumento.
+
+- Primer apartado
+Recorro todos los archivos o carpetas del directorio dado. En cada iteración ejecuto el comando ls -ld (d solo muestra una línea, es útil para los directorios) y guardo la salida en un fichero temporal. Con ayuda de grep y wc cuenta los emparejamientos de ejecutables, enlaces simbólicos y directorios identificados en el fichero.
+
+- Segundo apartado
+En primer lugar guardo el encabezado de cada fichero en un archivo temporal. A continuación, se lee cada línea y se cuentan los intérpretes
+
+- Tercer apartado
+En primer lugar, se recorre el directorio dado y se guarda la información (nivel, arraque o parada, prioridad y nombre) de cada fichero de arranque. A continuación se recorre cada línea y se busca se el campo nombre se encuentra en el archivo temporal aux2, si se encuentra significa que el archivo ya se ha analizado, si no se buscan todas las entradas con ese mismo nombre en los distintos niveles.
+
+- Cuarto apartado
+Utilizamos el fichero aux1 donde guardamos en un principio la información de cada fichero de arranque y buscamos las entradas que coincidan con el nivel pedido por el usuario.
