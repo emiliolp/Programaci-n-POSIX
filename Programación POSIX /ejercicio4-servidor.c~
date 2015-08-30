@@ -1,0 +1,248 @@
+#include <sys/ipc.h>
+#include <sys/types.h>
+#include <sys/msg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <time.h>
+#include <sys/ipc.h>
+#include <ctype.h>
+#include <signal.h>     /* Manejo de señales */
+
+#define ID_COLA_CENTRAL 2400	// Identificador para la cola central
+
+struct {
+	long prioridad;		// Prioridad del mensaje
+	int id;			// Identificador del proceso
+	int temp;		// Temperatura
+	int esEstable;		// 1: estable, 0: no estable
+} mensajeEnviado, mensajeRecibido;
+
+char mensaje[300];
+// Apuntador al fichero de log (se utilizará en el ejercicio resumen)
+FILE *fLog = NULL;
+
+// Prototipo de la función de log
+void funcionLog(char *mensaje);
+
+void manejador(int signal);
+
+// Descriptor de la cola central
+int desColaCentral = -1;
+
+char ruta[100];		//ruta incluido el fichero actual
+char *cwd;		//path del fichero		
+
+// Main
+int main(int argc, char **argv) {
+
+	// Variables locales
+	int i, resultado, longitudMensaje;
+		// Descriptor de la cola de cada proceso
+	int esInestable = 1;			// ¿Se ha alcanzado estabilidad?
+			// Array con las temperaturas de los procesos
+	int temperaturaInicial = 100;		// Temperatura inicial (argumento al programa)
+	int c;
+	int num_procesos=4;			// Número de procesos por defecto
+
+	if (signal(SIGINT, manejador) == SIG_ERR)
+        printf("No puedo asociar la señal SIGINT al manejador!\n");
+    	if (signal(SIGHUP, manejador) == SIG_ERR)
+        printf("No puedo asociar la señal SIGHUP al manejador!\n");
+    	if (signal(SIGTERM, manejador) == SIG_ERR)
+        printf("No puedo asociar la señal SIGTERM al manejador!\n");
+    
+	while ((c = getopt (argc, argv, "n:t:")) != -1)
+    	{
+        /* Podemos observar qué pasas con las variables externas que va gestionando
+           getopt() durante las sucesivas llamadas 
+           optopt recoge el valor de la opción cuando es desconocida (?)*/
+        switch (c)
+        {
+        case 'n':
+            num_procesos = atoi(optarg);
+			printf("Numero de procesos %d", num_procesos);
+            break;
+        case 't':
+        	temperaturaInicial = atoi(optarg);
+        	break;
+        case '?':
+            if (optopt == 'n')
+                fprintf (stderr, "La opción %c requiere un argumento.\n", optopt);
+            else if (optopt=='t')
+            	fprintf (stderr, "La opción %c requiere un argumento.\n", optopt);
+            else if (isprint (optopt))
+                fprintf (stderr, "Opción desconocida '-%c'.\n", optopt);
+            else
+                fprintf (stderr, "Caracter `\\x%x'.\n", optopt);
+            return 1;
+        default:
+            abort ();
+        }
+    }
+   
+	int desColasProcesos[num_procesos];
+	int tempArray[num_procesos];
+	//llamada a ftok
+	if((cwd=getcwd(NULL,500))==NULL)			// Devuelve la ruta del directorio donde se encuentra el servidor
+	{
+		perror("pwd");
+		exit(2);
+	}
+	sprintf(ruta,"%s/ejercicio4-servidor.c",cwd);		// Añade a la ruta anterior el nombre del servidor
+	key_t key=ftok(ruta,ID_COLA_CENTRAL);
+	
+	sprintf(mensaje,"Lanzando el proceso servidor...\n");
+	printf("%s",mensaje);
+	funcionLog(mensaje);
+
+	// Crear la cola central con identificador ID_COLA_CENTRAL
+	desColaCentral = msgget(key, 0600 | IPC_CREAT);
+
+	// Crear las colas para el resto de procesos y almacenar sus descriptores
+	for(i = 0; i < num_procesos; i++){
+		desColasProcesos[i] = msgget((key + 1 + i), 0600 | IPC_CREAT);
+	}
+
+	// Inicializar el mensaje que vamos a enviar a todos los procesos clientes
+	mensajeEnviado.prioridad = 1;
+	mensajeEnviado.id = 0;
+	mensajeEnviado.temp = temperaturaInicial;
+	mensajeEnviado.esEstable = 0;
+
+	// La longitud del mensaje es el tamaño de la estructura
+	longitudMensaje = sizeof(mensajeEnviado) - sizeof(long);
+
+	// Mientras que los procesos cliente tengan temperaturas diferentes
+	while(esInestable == 1){
+
+		int sumaTemperaturas = 0;	// Sumar todas las temperaturas en el bucle
+		int cambioEnTemperatura = 0;	// Para comprobar la estabilidad
+
+		// Recibo un mensaje de cada proceso
+		for(i = 0; i < num_procesos; i++){
+			resultado = msgrcv(desColaCentral, &mensajeRecibido, longitudMensaje, 1, 0);
+			if(resultado != longitudMensaje){
+				sprintf(mensaje,"\nERROR al recibir el mensaje de la cola del proceso %d\n",i);
+				printf("%s",mensaje);
+				exit(1);				
+			}
+			
+			/* Utilizamos tempArray (temperaturas en la última vuelta del bucle) para ver
+                           si alguna de las temperaturas nuevas es diferente de las temperaturas
+                           antiguas. Si eso sucede, entonces el sistema no es estable.*/
+			if(tempArray[(mensajeRecibido.id - 1)] != mensajeRecibido.temp) {
+				// Ha cambiado la temperatura
+				cambioEnTemperatura = 1;
+				// Actualizamos la temperatura para ese proceso
+				tempArray[(mensajeRecibido.id - 1)] = mensajeRecibido.temp;
+			}
+
+			// Acumulamos las temperatura
+			sumaTemperaturas += mensajeRecibido.temp;
+		}
+
+		// Cuando todos los procesos tienen la misma temperatura durante dos vueltas
+		if(cambioEnTemperatura == 0){
+			sprintf(mensaje,"Temperatura estabilizada a: %d\n",mensajeEnviado.temp);
+			printf("%s",mensaje);
+			funcionLog(mensaje);
+			// Forzar a salir del bucle
+			esInestable = 0;
+			// Preparar un nuevo mensaje informando a los clientes de que el sistema es estable
+			mensajeEnviado.esEstable = 1;
+		}
+		// En caso contrario:
+		else {
+			// Calcular una nueva temperatura y ponerla en el mensaje
+			int nuevaTemperatura = (2 * mensajeEnviado.temp + sumaTemperaturas) / (2+num_procesos);
+			mensajeEnviado.temp = nuevaTemperatura;
+			sprintf(mensaje,"Nueva temperatura %d\n",nuevaTemperatura);
+			printf("%s",mensaje);
+			funcionLog(mensaje);
+		}
+
+		// Mandar el mensaje a todos los procesos (informando de la nueva temperatura o
+		// de estabilidad)
+		for(i = 0; i < num_procesos; i++){
+			resultado = msgsnd(desColasProcesos[i], &mensajeEnviado, longitudMensaje, 0);
+			if(resultado != 0){
+				sprintf(mensaje,"\nERROR al enviar el mensaje a la cola del proceso %d\n",i);
+				printf("%s",mensaje);
+				funcionLog(mensaje);
+				exit(1);
+			}
+		}
+	}
+
+	exit(0);
+	while(1){
+	sleep(9);
+    }  /* Bucle */
+
+    /* exit */
+    exit(0);  
+}
+
+// Función auxiliar, escritura de un log
+void funcionLog(char *mensaje) {
+	int resultado;
+	char mensajeAEscribir[300];
+	time_t t;
+	// Abrir el fichero
+	if(fLog==NULL)
+		fLog = fopen("log-servidor.txt","at");
+	// Obtener la hora actual
+	t = time(NULL);
+	struct tm * p = localtime(&t);
+	strftime(mensajeAEscribir, 1000, "[%Y-%m-%d, %H:%M:%S]", p);
+
+	// Vamos a incluir la hora y el mensaje que nos pasan
+	sprintf(mensajeAEscribir, "%s ==> %s\n", mensajeAEscribir, mensaje);
+	
+	// Escribir finalmente en el fichero
+	resultado = fputs(mensajeAEscribir,fLog);
+	if ( resultado < 0)
+		printf("Error escribiendo en el fichero de log\n");
+
+	fclose(fLog);
+	fLog=NULL;
+}
+
+void manejador(int signal){
+	int i;
+	switch(signal)
+	{
+		case SIGINT:
+			sprintf(mensaje,"\nCapturada la señal SIGINT\n");
+			printf("%s",mensaje);
+			funcionLog(mensaje);
+			break;
+
+		case SIGHUP:
+			sprintf(mensaje,"\nCapturada la señal SIGHUP\n");
+			printf("%s",mensaje);
+			funcionLog(mensaje);
+			break;
+
+		case SIGTERM:
+			sprintf(mensaje,"Capturada la señal SIGTERM\n");
+			printf("%s",mensaje);
+			funcionLog(mensaje);
+			break;
+	}
+	sprintf(mensaje,"\nCerrando la cola central...\n");
+	printf("%s",mensaje);
+	funcionLog(mensaje);
+	int resultado = msgctl(desColaCentral, IPC_RMID, 0);
+	if(resultado != 0){
+		sprintf(mensaje,"\nERROR cerrando la cola central\n");
+		printf("%s",mensaje);
+		funcionLog(mensaje);
+	}
+	for(i=0; i<3; i++){
+        printf("Hasta luego... cerrando ficheros...\n");
+        sleep(2);
+    }
+    exit(0);
+}

@@ -1,0 +1,84 @@
+EJERCICIO 1
+
+En el ejercicio 1 se pide realizar un programa que muestre la información de un usuario pasado por parámetro.
+
+En primer lugar debemos llamar a la función getopt() para ver cada uno de los parámetros pasados en este caso son -u, -g, -e y -s. La única opción que requiere información es -u por ello se le pone ":" en la llamada a la función.
+
+La información pedida se encuentra en las estructuras struct passwd y struct group se llamará a cada campo de las mismas cuando sea necesario.
+
+Ejemplos de ejecución:
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas/p3$ ./ejercicio1 -u emilio
+Nombre de usuario: Emilio,,,
+Identificador de usuario: 1000
+Contraseña: x
+Carpeta inicio: /home/emilio
+Intérprete por defecto: /bin/bash
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas/p3$ ./ejercicio1
+Nombre de usuario: Emilio,,,
+Identificador de usuario: 1000
+Contraseña: x
+Carpeta inicio: /home/emilio
+Intérprete por defecto: /bin/bash
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas/p3$ ./ejercicio1 -e
+Nombre de usuario: Emilio,,,
+Identificador de usuario: 1000
+Contraseña: x
+Carpeta inicio: /home/emilio
+Intérprete por defecto: /bin/bash
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas/p3$ ./ejercicio1 -u emilio -s -g
+User name: Emilio,,,
+User id: 1000
+Password: x
+Home: /home/emilio
+Default shell: /bin/bash
+Main Group Number: 1000
+Main Group Name: emilio
+
+--------------------------------
+EJERCICIO 2
+
+El ejercicio 2 es muy parecido al ejercicio1 con la salvedad de que la información se centra en el grupo en vez del usuario. Se hace uso de las mismas estructuras y las mismas funciones.
+
+Ejemplos de ejecución:
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas/p3$ ./ejercicio2 -g emilio
+Path del usuario actual: /usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+Identificador del grupo: 1000
+Nombre del grupo: emilio
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas/p3$ ./ejercicio2 -e -g emilio
+Path del usuario actual: /usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+Identificador del grupo: 1000
+Nombre del grupo: emilio
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas/p3$ ./ejercicio2 -s
+Current user path: /usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+Group identifier: 1000
+Group name: emilio
+
+--------------------------------
+
+En el ejercicio 3 se nos pide comunicar dos procesos, padre e hijo. En primer lugar se crea una tubería anónima llamada fildes. El siguiente paso es crear un proceso hijo con la función fork().
+
+El proceso hijo cierra el descriptor de lectura fildes[0] y escribe en fildes[1] un número aleatorio generado. Para escribir hace uso de la función write(). Cuando termina cierra el descriptor de escritura.
+
+El proceso padre cierra el descriptor de escritura fildes[1] y lee en fildes[0] el número generado por el hijo. Para ello utiliza la función read. Cuando termina cierra el descriptor de lectura.
+
+Ejemplos ejecución:
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas/p3/lopez_piña_emilio_PASJ
+un1314P3$ ./ejercicio3
+[PADRE]: mi PID es 13107 y el PID de mi hijo es 13108 
+[PADRE]: leyendo el número aleatorio de la tubería...
+[HIJO]: mi PID es 13108 y mi PPID es 13107
+[HIJO]: genero el número aleatorio 2622
+[HIJO]: escribimos el número aleatorio en la tubería...
+[HIJO]: tubería cerrada Salgo...
+[PADRE]: el número aleatorio que leemos de la tubería es 2622
+[PADRE]: tubería cerrada. Salgo...
+
+
+

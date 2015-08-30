@@ -1,0 +1,61 @@
+Ejercicio 4
+
+Apartado 1:
+
+Para crear el id, en primer lugar hacemos uso de la función getcwd que nos devuelve la ruta del directorio donde se encuentra alojado el servidor, después concatenamos la ruta anterior y el nombre del fichero. A continuación llamamos a ftok, pasándole como primer argumento la ruta completa y un número, he elegido ID_COLA_CENTRAL que se encuentra declarado como variable global. Esta operación se realiza tanto en el cliente como en el servidor.
+
+Apartado 2:
+
+Pasamos argumentos utilizando la función getopt y actuamos igual que en los ejercicios 1 y 2, pero con -n -t en el servidor e -i -t en el cliente. En el caso del cliente la opción -i es obligatoria a mi parecer, realizar ésto con getopt no es posible, por ello, mediante un if he hecho tal comprobación.
+
+Ejemplos ejecución:
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas/p3/lopez_piña_emilio_PASJ
+un1314P3$ ./ejercicio4-servidor -t 33
+Lanzando el proceso servidor...
+Nueva temperatura 34
+Nueva temperatura 33
+Nueva temperatura 33
+Nueva temperatura 33
+Nueva temperatura 32
+Nueva temperatura 32
+Nueva temperatura 31
+Nueva temperatura 31
+Temperatura estabilizada a: 31
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas/p3/lopez_piña_emilio_PASJ
+un1314P3$ ./ejercicio4-cliente -i 1
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas/p3/lopez_piña_emilio_PASJ
+un1314P3$ ./ejercicio4-cliente -i 2 -t 33
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas/p3/lopez_piña_emilio_PASJ
+un1314P3$ ./ejercicio4-cliente -i 3 -t 33
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas/p3/lopez_piña_emilio_PASJ
+un1314P3$ ./ejercicio4-cliente -i 4 -t 22
+
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas/p3/lopez_piña_emilio_PASJ
+un1314P3$ ./ejercicio4-servidor -n 2 -t 33
+Numero de procesos 2Lanzando el proceso servidor...
+Nueva temperatura 37
+Nueva temperatura 38
+Nueva temperatura 38
+Nueva temperatura 37
+Nueva temperatura 37
+Nueva temperatura 36
+Nueva temperatura 36
+Temperatura estabilizada a: 36
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas/p3/lopez_piña_emilio_PASJ
+un1314P3$ ./ejercicio4-cliente -i 1
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas/p3/lopez_piña_emilio_PASJ
+un1314P3$ ./ejercicio4-cliente -i 2 -t 33
+
+
+
+
+
+

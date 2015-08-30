@@ -1,0 +1,50 @@
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+
+int main()
+{
+	pid_t rf;
+	int fildes[2];		
+	int status;
+	status = pipe(fildes);		//Creación de tubería anónima
+	int numeroAleatorio;
+	int longitudMensaje = sizeof(numeroAleatorio);
+	if (status == -1 ) 
+	{
+	// Ocurrió un error al crear la tubería
+		printf("Error al crear tuberia\n");
+		exit(0);
+	}
+	rf=fork();								//Creación subproceso
+	switch(rf)
+	{
+		case -1:							//Valor devuelto -1
+			printf ("No he podido crear el proceso hijo \n");
+			exit(1);
+
+		case 0:								//Proceso hijo
+			close(fildes[0]);					//Se cierra el descriptor de lectura
+			printf ("[HIJO]: mi PID es %d y mi PPID es %d\n", getpid(), getppid());
+			srand(time(NULL));					//Creación número aleatorio
+			numeroAleatorio=rand()%5000;
+			printf("[HIJO]: genero el número aleatorio %d\n", numeroAleatorio);
+			printf("[HIJO]: escribimos el número aleatorio en la tubería...\n");
+			write(fildes[1], &numeroAleatorio, longitudMensaje);	//Escritura número en descriptor de escritura
+			printf("[HIJO]: tubería cerrada Salgo...\n");
+			close(fildes[1]);					//Cerrar descriptor de escritura
+			break;
+
+		default:							//Proceso padre
+			printf ("[PADRE]: mi PID es %d y el PID de mi hijo es %d \n", getpid(), rf);
+			printf ("[PADRE]: leyendo el número aleatorio de la tubería...\n");
+			close(fildes[1]);					//Cierra descriptor escritura
+			read(fildes[0], &numeroAleatorio, longitudMensaje); 	//Lee número en descriptor de lecutra
+			printf("[PADRE]: el número aleatorio que leemos de la tubería es %d\n", numeroAleatorio);
+			printf("[PADRE]: tubería cerrada. Salgo...\n");
+			close(fildes[0]);					//Cierra descriptor lectura
+	}
+	return 0;
+}

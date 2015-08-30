@@ -1,0 +1,15 @@
+
+
+Ejemplos ejecución:
+
+emilio@emilio-Satellite-C660:~/informatica/segundo/pas/p3/lopez_piña_emilio_PASJ
+un1314P3$ ./ejercicio3
+[PADRE]: mi PID es 13107 y el PID de mi hijo es 13108 
+[PADRE]: leyendo el número aleatorio de la tubería...
+[HIJO]: mi PID es 13108 y mi PPID es 13107
+[HIJO]: genero el número aleatorio 2622
+[HIJO]: escribimos el número aleatorio en la tubería...
+[HIJO]: tubería cerrada Salgo...
+[PADRE]: el número aleatorio que leemos de la tubería es 2622
+[PADRE]: tubería cerrada. Salgo...
+
